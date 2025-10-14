@@ -1,106 +1,76 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-void tambah(int* a, int* b, int* hasil) {
-    *hasil = *a + *b;
-}
+// Struct untuk menyimpan data KTP
+struct KTP {
+    string nik;
+    string nama;
+    string jenisKelamin;
+    string alamat;
+    string tanggalLahir;
+    string agama;
+    string pekerjaan;
+    string statusKawin;
+    string kewarganegaraan;
+    string noHP;
+};
 
-void kurang(int* a, int* b, int* hasil) {
-    *hasil = *a - *b;
-}
-
-void kali(int* a, int* b, int* hasil) {
-    *hasil = (*a) * (*b);
-}
-
-void bagi(int* a, int* b, float* hasil) {
-    if (*b != 0) {
-        *hasil = static_cast<float>(*a) / (*b);
-    } else {
-        *hasil = 0;
-        cout << "Pembagian dengan nol tidak diperbolehkan!" << endl;
-    }
-}
-
-void cekGanjilGenap(int* bil) {
-    if (*bil % 2 == 0)
-        cout << *bil << " adalah bilangan genap." << endl;
-    else
-        cout << *bil << " adalah bilangan ganjil." << endl;
-}
-
-void faktorial(int* bil, long long* hasil) {
-    *hasil = 1;
-    if (*bil < 0) {
-        cout << "Faktorial tidak didefinisikan untuk bilangan negatif!" << endl;
-        *hasil = 0;
-        return;
-    }
-    for (int i = 1; i <= *bil; i++) {
-        *hasil *= i;
-    }
-}
-
-void cekPrima(int* bil) {
-    if (*bil < 2) {
-        cout << *bil << " bukan bilangan prima." << endl;
-        return;
+// Class untuk mengatur input dan output data
+class OperasiKTP {
+private:
+    KTP data[100];
+    int jumlah;
+public:
+    OperasiKTP() {
+        jumlah = 0;
     }
 
-    bool prima = true;
-    for (int i = 2; i <= *bil / 2; i++) {
-        if (*bil % i == 0) {
-            prima = false;
-            break;
+    void inputData() {
+        cout << "Masukkan jumlah data KTP: ";
+        cin >> jumlah;
+        cin.ignore(); // membersihkan buffer
+
+        for (int i = 0; i < jumlah; i++) {
+            cout << "\n=== Input Data ke-" << i + 1 << " ===\n";
+            cout << "NIK              : "; getline(cin, data[i].nik);
+            cout << "Nama             : "; getline(cin, data[i].nama);
+            cout << "Jenis Kelamin    : "; getline(cin, data[i].jenisKelamin);
+            cout << "Alamat           : "; getline(cin, data[i].alamat);
+            cout << "Tanggal Lahir    : "; getline(cin, data[i].tanggalLahir);
+            cout << "Agama            : "; getline(cin, data[i].agama);
+            cout << "Pekerjaan        : "; getline(cin, data[i].pekerjaan);
+            cout << "Status Kawin     : "; getline(cin, data[i].statusKawin);
+            cout << "Kewarganegaraan  : "; getline(cin, data[i].kewarganegaraan);
+            cout << "No. HP           : "; getline(cin, data[i].noHP);
         }
     }
 
-    if (prima)
-        cout << *bil << " adalah bilangan prima." << endl;
-    else
-        cout << *bil << " bukan bilangan prima." << endl;
-}
+    void tampilkanData() {
+        cout << "\n\n=== DATA KTP KELOMPOK ===\n";
+        for (int i = 0; i < jumlah; i++) {
+            cout << "\nData ke-" << i + 1 << endl;
+            cout << "NIK              : " << data[i].nik << endl;
+            cout << "Nama             : " << data[i].nama << endl;
+            cout << "Jenis Kelamin    : " << data[i].jenisKelamin << endl;
+            cout << "Alamat           : " << data[i].alamat << endl;
+            cout << "Tanggal Lahir    : " << data[i].tanggalLahir << endl;
+            cout << "Agama            : " << data[i].agama << endl;
+            cout << "Pekerjaan        : " << data[i].pekerjaan << endl;
+            cout << "Status Kawin     : " << data[i].statusKawin << endl;
+            cout << "Kewarganegaraan  : " << data[i].kewarganegaraan << endl;
+            cout << "No. HP           : " << data[i].noHP << endl;
+        }
+    }
+};
 
+// Fungsi utama
 int main() {
-    int x, y;
-    int hasilInt;
-    float hasilFloat;
-    long long faktorialX, faktorialY;
+    OperasiKTP ktpApp;
 
-    cout << "Masukkan bilangan pertama: ";
-    cin >> x;
-    cout << "Masukkan bilangan kedua: ";
-    cin >> y;
-
-    cout << "\n=== Cek Ganjil atau Genap ===" << endl;
-    cekGanjilGenap(&x);
-    cekGanjilGenap(&y);
-
-    cout << "\n=== Cek Bilangan Prima ===" << endl;
-    cekPrima(&x);
-    cekPrima(&y);
-
-    // Faktorial
-    cout << "\n=== Hasil Faktorial ===" << endl;
-    faktorial(&x, &faktorialX);
-    faktorial(&y, &faktorialY);
-    if (faktorialX != 0)
-        cout << "Faktorial dari " << x << " = " << faktorialX << endl;
-    if (faktorialY != 0)
-        cout << "Faktorial dari " << y << " = " << faktorialY << endl;
-
-    cout << "\n=== Hasil Operasi Aritmatika ===" << endl;
-    tambah(&x, &y, &hasilInt);
-    cout << "Hasil Pertambahan: " << hasilInt << endl;
-
-    kurang(&x, &y, &hasilInt);
-    cout << "Hasil Pengurangan: " << hasilInt << endl;
-
-    kali(&x, &y, &hasilInt);
-    cout << "Hasil Perkalian: " << hasilInt << endl;
-
-    bagi(&x, &y, &hasilFloat);
-    cout << "Hasil Pembagian: " << hasilFloat << endl;
+    ktpApp.inputData();
+    ktpApp.tampilkanData();
 
     return 0;
 }
+
