@@ -1,76 +1,105 @@
-#include <iostream>
-#include <string>
-using namespace std;
 
-// Struct untuk menyimpan data KTP
-struct KTP {
-    string nik;
-    string nama;
-    string jenisKelamin;
-    string alamat;
-    string tanggalLahir;
-    string agama;
-    string pekerjaan;
-    string statusKawin;
-    string kewarganegaraan;
-    string noHP;
-};
+import java.util.Scanner;
 
-// Class untuk mengatur input dan output data
-class OperasiKTP {
-private:
-    KTP data[100];
-    int jumlah;
-public:
-    OperasiKTP() {
-        jumlah = 0;
+// Superclass
+class Pembayaran {
+    public void proses(double total) {
+        System.out.println("Memproses pembayaran sebesar Rp" + total);
     }
+}
 
-    void inputData() {
-        cout << "Masukkan jumlah data KTP: ";
-        cin >> jumlah;
-        cin.ignore(); // membersihkan buffer
+// Subclass: Tunai
+class Tunai extends Pembayaran {
+    @Override
+    public void proses(double total) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n=== Pembayaran Tunai ===");
+        System.out.print("Masukkan uang yang dibayarkan: Rp");
+        double uangDiberikan = sc.nextDouble();
 
-        for (int i = 0; i < jumlah; i++) {
-            cout << "\n=== Input Data ke-" << i + 1 << " ===\n";
-            cout << "NIK              : "; getline(cin, data[i].nik);
-            cout << "Nama             : "; getline(cin, data[i].nama);
-            cout << "Jenis Kelamin    : "; getline(cin, data[i].jenisKelamin);
-            cout << "Alamat           : "; getline(cin, data[i].alamat);
-            cout << "Tanggal Lahir    : "; getline(cin, data[i].tanggalLahir);
-            cout << "Agama            : "; getline(cin, data[i].agama);
-            cout << "Pekerjaan        : "; getline(cin, data[i].pekerjaan);
-            cout << "Status Kawin     : "; getline(cin, data[i].statusKawin);
-            cout << "Kewarganegaraan  : "; getline(cin, data[i].kewarganegaraan);
-            cout << "No. HP           : "; getline(cin, data[i].noHP);
+        if (uangDiberikan < total) {
+            System.out.println("Uang tidak cukup! Transaksi dibatalkan.");
+            return;
         }
+
+        double kembalian = uangDiberikan - total;
+        System.out.println("Total Belanja : Rp" + total);
+        System.out.println("Uang Diberikan: Rp" + uangDiberikan);
+        System.out.println("Kembalian     : Rp" + kembalian);
+        System.out.println("Transaksi berhasil!");
     }
+}
 
-    void tampilkanData() {
-        cout << "\n\n=== DATA KTP KELOMPOK ===\n";
-        for (int i = 0; i < jumlah; i++) {
-            cout << "\nData ke-" << i + 1 << endl;
-            cout << "NIK              : " << data[i].nik << endl;
-            cout << "Nama             : " << data[i].nama << endl;
-            cout << "Jenis Kelamin    : " << data[i].jenisKelamin << endl;
-            cout << "Alamat           : " << data[i].alamat << endl;
-            cout << "Tanggal Lahir    : " << data[i].tanggalLahir << endl;
-            cout << "Agama            : " << data[i].agama << endl;
-            cout << "Pekerjaan        : " << data[i].pekerjaan << endl;
-            cout << "Status Kawin     : " << data[i].statusKawin << endl;
-            cout << "Kewarganegaraan  : " << data[i].kewarganegaraan << endl;
-            cout << "No. HP           : " << data[i].noHP << endl;
-        }
+// Subclass: Kartu
+class Kartu extends Pembayaran {
+    @Override
+    public void proses(double total) {
+        double biayaAdmin = total * 0.02; // 2% biaya admin
+        double totalBayar = total + biayaAdmin;
+        System.out.println("\n=== Pembayaran Kartu ===");
+        System.out.println("Total Belanja  : Rp" + total);
+        System.out.println("Biaya Admin (2%): Rp" + biayaAdmin);
+        System.out.println("Total yang Dikenakan: Rp" + totalBayar);
+        System.out.println("Pembayaran dengan kartu berhasil!");
     }
-};
+}
 
-// Fungsi utama
-int main() {
-    OperasiKTP ktpApp;
+// Subclass: DompetDigital
+class DompetDigital extends Pembayaran {
+    @Override
+    public void proses(double total) {
+        double potongan = total * 0.05; // potongan 5%
+        double totalBayar = total - potongan;
+        System.out.println("\n=== Pembayaran Dompet Digital ===");
+        System.out.println("Total Belanja  : Rp" + total);
+        System.out.println("Potongan (5%)  : Rp" + potongan);
+        System.out.println("Total Bayar    : Rp" + totalBayar);
+        System.out.println("Pembayaran dengan dompet digital berhasil!");
+    }
+}
 
-    ktpApp.inputData();
-    ktpApp.tampilkanData();
+// Tester
+public class TesterPembayaran {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        double totalBelanja;
 
-    return 0;
+        System.out.println("=== PROGRAM PEMBAYARAN POLYMORPHISM ===");
+        System.out.print("Masukkan total belanja Anda: Rp");
+        totalBelanja = input.nextDouble();
+
+        Pembayaran[] daftarPembayaran = new Pembayaran[3];
+        daftarPembayaran[0] = new Tunai();
+        daftarPembayaran[1] = new Kartu();
+        daftarPembayaran[2] = new DompetDigital();
+
+        int pilihan;
+        do {
+            System.out.println("\nPilih metode pembayaran:");
+            System.out.println("1. Tunai");
+            System.out.println("2. Kartu");
+            System.out.println("3. Dompet Digital");
+            System.out.println("4. Keluar");
+            System.out.print("Masukkan pilihan: ");
+            pilihan = input.nextInt();
+
+            switch (pilihan) {
+                case 1:
+                    daftarPembayaran[0].proses(totalBelanja);
+                    break;
+                case 2:
+                    daftarPembayaran[1].proses(totalBelanja);
+                    break;
+                case 3:
+                    daftarPembayaran[2].proses(totalBelanja);
+                    break;
+                case 4:
+                    System.out.println("\nTerima kasih sudah menggunakan sistem pembayaran!");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid!");
+            }
+        } while (pilihan != 4);
+    }
 }
 
